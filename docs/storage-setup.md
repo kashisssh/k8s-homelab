@@ -18,7 +18,7 @@ kubectl get storageclass
 ```
 
 ## Usage Example (PVC)
----
+```yaml
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -31,6 +31,7 @@ spec:
   resources:
     requests:
       storage: 10Gi
+```
 
 ## Current Status
 StorageClass local-path is default
