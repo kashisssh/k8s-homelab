@@ -34,5 +34,5 @@ spec:
 ```
 
 ## Current Status
-StorageClass local-path is default
-Used by Home Assistant
+- StorageClass local-path is default
+- Used by Home Assistant
