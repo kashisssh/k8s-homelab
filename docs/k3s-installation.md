@@ -32,13 +32,13 @@ Get token from master:
 sudo cat /var/lib/rancher/k3s/server/node-token
 ```
 
-On each worker:
+# On each worker:
 ```bash
 curl -sfL https://get.k3s.io | K3S_URL=https://192.168.4.43:6443 \
 K3S_TOKEN=PASTE_TOKEN_HERE sh -
 ```
 
-Step 4: Verify
+## Step 4: Verify
 
 ```bash
 kubectl get nodes -o wide
