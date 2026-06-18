@@ -31,7 +31,6 @@ spec:
   resources:
     requests:
       storage: 10Gi
----
 
 ## Current Status
 StorageClass local-path is default
