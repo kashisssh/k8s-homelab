@@ -1,0 +1,78 @@
+# Home Assistant with Persistent Storage
+# =====================================
+
+# 1. Namespace - Organizes all Home Assistant resources
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: home-assistant
+
+---
+# 2. PersistentVolumeClaim - Requests 10GB of storage from Local Path Provisioner
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: home-assistant-config
+  namespace: home-assistant
+spec:
+  accessModes:
+    - ReadWriteOnce          # Single node read/write
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 10Gi          # 10GB for config, database, history
+
+---
+# 3. Deployment - Runs the Home Assistant container
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: home-assistant
+  namespace: home-assistant
+spec:
+  replicas: 1                # Run only one instance
+  selector:
+    matchLabels:
+      app: home-assistant
+  template:
+    metadata:
+      labels:
+        app: home-assistant
+    spec:
+      # Prefer to run on worker nodes (keep master light)
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 80
+            preference:
+              matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: DoesNotExist
+      containers:
+      - name: home-assistant
+        image: ghcr.io/home-assistant/home-assistant:stable
+        ports:
+        - containerPort: 8123     # Default Home Assistant port
+        volumeMounts:
+        - name: config
+          mountPath: /config      # Where HA stores all data
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: home-assistant-config
+
+---
+# 4. Service - Exposes Home Assistant to the network
+apiVersion: v1
+kind: Service
+metadata:
+  name: home-assistant
+  namespace: home-assistant
+spec:
+  selector:
+    app: home-assistant
+  ports:
+  - port: 8123
+    targetPort: 8123
+    nodePort: 30123           # Access via http://<node-ip>:30123
+  type: NodePort
