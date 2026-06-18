@@ -12,6 +12,7 @@ net.ipv4.ip_forward = 1
 EOF
 
 sudo sysctl --system
+```
 
 ## Step 2: Install k3s on Master
 
@@ -21,6 +22,7 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server \
   --disable servicelb \
   --disable local-storage \
   --kubelet-arg=eviction-hard=memory.available<400Mi" sh -
+```
 
 ## Step 3: Join Worker Nodes
 
@@ -28,13 +30,16 @@ Get token from master:
 
 ```bash
 sudo cat /var/lib/rancher/k3s/server/node-token
+```
 
 On each worker:
 ```bash
 curl -sfL https://get.k3s.io | K3S_URL=https://192.168.4.43:6443 \
 K3S_TOKEN=PASTE_TOKEN_HERE sh -
+```
 
 Step 4: Verify
 
 ```bash
 kubectl get nodes -o wide
+```

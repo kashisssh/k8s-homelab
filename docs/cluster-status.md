@@ -22,6 +22,7 @@
 
 ```bash
 kubectl get nodes -o wide
+```
 
 # Cluster Status - June 17, 2026
 
