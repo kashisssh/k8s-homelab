@@ -20,7 +20,16 @@
   - Used aggressive memory eviction settings.
   - Fixed kubeconfig permissions.
 
-## Current Cluster Status
-
 ```bash
 kubectl get nodes -o wide
+
+# Cluster Status - June 17, 2026
+
+## Deployed Applications
+
+### Home Assistant
+- Status: Running
+- Namespace: `home-assistant`
+- Persistent Storage: Yes (10Gi Local Path)
+- Access: NodePort 30123 on any node IP
+
