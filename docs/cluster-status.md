@@ -34,3 +34,12 @@ kubectl get nodes -o wide
 - Persistent Storage: Yes (10Gi Local Path)
 - Access: NodePort 30123 on any node IP
 
+# Cluster Status - June 22, 2026
+
+### AdGuard Home
+- Status: Running
+- Namespace: `adguard`
+- Persistent Storage: Yes (5Gi Local Path)
+- DNS: Port 53 (UDP/TCP)
+- Web UI: NodePort 30080
+- Purpose: Network-wide ad blocking
