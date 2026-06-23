@@ -1,0 +1,44 @@
+# k3s Homelab Architecture
+
+Internet / Home Network (192.168.4.0/22)
+          |
+   +------+------+
+   | Eero Router |
+   +------+------+
+          |
+   +------+------+     +-----------------+
+   | Netgear     |-----| TP-Link Extender|
+   | GS108 Switch|     +-----------------+
+   +------+------+
+          |
+   +------+------+------+ 
+   |      |      |      |
++--v--+ +--v--+ +--v--+
+| k3s | | k3s | | k3s |
+|master|worker1|worker2|
++-----+ +-----+ +-----+
+   |       |       |
+   +-------+-------+
+           |
+    Local Path Provisioner (Persistent Storage)
+           |
+    +-------------------+
+    | Home Assistant    |
+    | (with Hue)        |
+    +-------------------+
+           |
+    +-------------------+
+    | AdGuard Home      |
+    | (Network-wide Ad  |
+    |  Blocking + DNS)  |
+    +-------------------+
+
+## Key Layers
+- **Hardware**: 3 Dell Edge Platform nodes + networking
+- **OS**: Ubuntu 22.04.5 LTS
+- **Orchestration**: k3s (lightweight Kubernetes)
+- **Storage**: Local Path Provisioner
+- **Applications**: Home Assistant + Philips Hue, AdGuard Home
+- **Access**: NodePort (30123 for HA, 30080 for AdGuard)
+- **Future**: Ingress, GitOps (ArgoCD), Monitoring
+
