@@ -43,3 +43,23 @@ kubectl get nodes -o wide
 - DNS: Port 53 (UDP/TCP)
 - Web UI: NodePort 30080
 - Purpose: Network-wide ad blocking
+
+# Cluster Status - July 2026
+
+## Hardware Move (June 28, 2026)
+- Full power off and physical relocation of all hardware
+- Cluster recovered successfully after move
+- Required `kubectl uncordon` on workers + rollout restarts for some deployments
+- AdGuard Home needed re-configuration (config file was lost during power cycle, but query data was preserved)
+
+## Monitoring Stack Deployed
+- **Namespace**: `monitoring`
+- **Components**:
+  - Prometheus (metrics collection)
+  - Grafana (visualization)
+  - Node Exporter (DaemonSet on all nodes)
+- **Access**:
+  - Prometheus: NodePort `30990`
+  - Grafana: NodePort `31000`
+- All components using Local Path Provisioner for persistence
+- Node Exporter running with `hostNetwork: true` + `hostPort: 9100`

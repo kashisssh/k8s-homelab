@@ -7,6 +7,7 @@
 - Local Path Provisioner installed
 - Home Assistant deployed with persistent storage
 - AdGuard Home (network-wide ad blocker)
+- Monitoring Stack — Prometheus + Grafana + Node Exporter (full node metrics)
 
 ## Documentation
 - [Cluster Status & Challenges](docs/cluster-status.md)
@@ -14,11 +15,11 @@
 - [Home Assistant Deployment](docs/home-assistant-deployment.md)
 - [AdGuard Home](docs/adguard-home-deployment.md)
 - [Storage Setup](docs/storage-setup.md)
+- [Monitoring Stack](docs/monitoring-deployment.md)
 
 ## Hardware
 - 3x Dell Edge Platform
 - Netgear GS108 + TP-Link WiFi Extender
 
 ## Next Goals
-- Monitoring (Prometheus + Grafana)
 - GitOps with ArgoCD

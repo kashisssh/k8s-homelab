@@ -11,7 +11,7 @@ Internet / Home Network (192.168.4.0/22)
    | GS108 Switch|     +-----------------+
    +------+------+
           |
-   +------+------+------+ 
+   +------+------+------+
    |      |      |      |
 +--v--+ +--v--+ +--v--+
 | k3s | | k3s | | k3s |
@@ -30,15 +30,31 @@ Internet / Home Network (192.168.4.0/22)
     +-------------------+
     | AdGuard Home      |
     | (Network-wide Ad  |
-    |  Blocking + DNS)  |
+    |  Blocking + DNS) |
     +-------------------+
+           |
+    +-----------------------------+
+    | Monitoring Stack            |
+    | - Prometheus (metrics)      |
+    | - Grafana (dashboards)      |
+    | - Node Exporter (per node)  |
+    +-----------------------------+
 
 ## Key Layers
-- **Hardware**: 3 Dell Edge Platform nodes + networking
+- **Hardware**: 3x Dell Edge Platform Nodes + networking
 - **OS**: Ubuntu 22.04.5 LTS
 - **Orchestration**: k3s (lightweight Kubernetes)
 - **Storage**: Local Path Provisioner
-- **Applications**: Home Assistant + Philips Hue, AdGuard Home
-- **Access**: NodePort (30123 for HA, 30080 for AdGuard)
-- **Future**: Ingress, GitOps (ArgoCD), Monitoring
-
+- **Applications**:
+  - Home Assistant + Philips Hue
+  - AdGuard Home (Ad Blocking + DNS)
+  - Monitoring Stack (Prometheus + Grafana + Node Exporter)
+- **Access**:
+  - Home Assistant: NodePort 30123
+  - AdGuard Home: NodePort 30080
+  - Prometheus: NodePort 30990
+  - Grafana: NodePort 31000
+- **Future**:
+  - Ingress Controller
+  - GitOps with ArgoCD
+  - Loki + Promtail (logging)
