@@ -6,55 +6,52 @@ Internet / Home Network (192.168.4.0/22)
    | Eero Router |
    +------+------+
           |
-   +------+------+     +-----------------+
-   | Netgear     |-----| TP-Link Extender|
-   | GS108 Switch|     +-----------------+
+   +------+------+ +-----------------+
+   | Netgear |-----| TP-Link Extender|
+   | GS108 Switch| +-----------------+
    +------+------+
           |
    +------+------+------+
-   |      |      |      |
+   | | | |
 +--v--+ +--v--+ +--v--+
 | k3s | | k3s | | k3s |
 |master|worker1|worker2|
 +-----+ +-----+ +-----+
-   |       |       |
+          |
+       ArgoCD (GitOps)
+          |
    +-------+-------+
            |
-    Local Path Provisioner (Persistent Storage)
+    Local Path Provisioner
            |
     +-------------------+
     | Home Assistant    |
-    | (with Hue)        |
+    | (with Philips Hue)|
     +-------------------+
            |
     +-------------------+
     | AdGuard Home      |
-    | (Network-wide Ad  |
-    |  Blocking + DNS) |
+    | (Ad Blocking + DNS)|
     +-------------------+
            |
     +-----------------------------+
     | Monitoring Stack            |
-    | - Prometheus (metrics)      |
-    | - Grafana (dashboards)      |
-    | - Node Exporter (per node)  |
+    | - Prometheus                |
+    | - Grafana (with dashboards) |
+    | - Node Exporter             |
     +-----------------------------+
 
 ## Key Layers
-- **Hardware**: 3x Dell Edge Platform Nodes + networking
+- **Hardware**: 3x Dell Edge + Netgear Switch + TP-Link Extender
 - **OS**: Ubuntu 22.04.5 LTS
-- **Orchestration**: k3s (lightweight Kubernetes)
+- **Orchestration**: k3s Lightweight Kubernetes
+- **GitOps**: ArgoCD (managing AdGuard + planned for all apps)
 - **Storage**: Local Path Provisioner
 - **Applications**:
   - Home Assistant + Philips Hue
-  - AdGuard Home (Ad Blocking + DNS)
-  - Monitoring Stack (Prometheus + Grafana + Node Exporter)
-- **Access**:
-  - Home Assistant: NodePort 30123
-  - AdGuard Home: NodePort 30080
-  - Prometheus: NodePort 30990
-  - Grafana: NodePort 31000
+  - AdGuard Home (network-wide ad blocking + DNS)
+  - Prometheus + Grafana + Node Exporter
+- **Access Pattern**: NodePort services
 - **Future**:
-  - Ingress Controller
-  - GitOps with ArgoCD
-  - Loki + Promtail (logging)
+  - Full App of Apps pattern in ArgoCD
+  - Ingress + Cert-Manager

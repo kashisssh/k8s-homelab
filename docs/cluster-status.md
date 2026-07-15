@@ -1,7 +1,7 @@
 # Cluster Status - June 16, 2026
 
 ## Hardware
-- 3x Dell VEP 1425 (8GB RAM each)
+- 3x Dell Edge (8GB RAM each)
 - Netgear GS108 Switch + TP-Link WiFi Extender (RE315)
 
 ## Installation Challenges & Solutions
@@ -63,3 +63,6 @@ kubectl get nodes -o wide
   - Grafana: NodePort `31000`
 - All components using Local Path Provisioner for persistence
 - Node Exporter running with `hostNetwork: true` + `hostPort: 9100`
+
+## GitOps (ArgoCD)
+- Status: Managing AdGuard Home, Monitoring and Home Assistant
