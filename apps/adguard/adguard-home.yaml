@@ -1,4 +1,3 @@
-# AdGuard Home with Persistent Storage
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -32,11 +31,13 @@ spec:
       labels:
         app: adguard-home
     spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
       containers:
       - name: adguard-home
         image: adguard/adguardhome:latest
         ports:
-        - containerPort: 3000
+        - containerPort: 80
           name: web
         - containerPort: 53
           protocol: UDP
@@ -63,16 +64,6 @@ spec:
   selector:
     app: adguard-home
   ports:
-  - name: dns-udp
-    port: 53
-    protocol: UDP
-    targetPort: 53
-    nodePort: 32043
-  - name: dns-tcp
-    port: 53
-    protocol: TCP
-    targetPort: 53
-    nodePort: 32043
   - name: web
     port: 3000
     targetPort: 3000
