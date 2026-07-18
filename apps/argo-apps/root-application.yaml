@@ -9,11 +9,18 @@ spec:
     repoURL: https://github.com/kashisssh/k8s-homelab.git
     targetRevision: main
     path: apps
-    directory:
-      recurse: true
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
+  ignoreDifferences:
+  - group: ""
+    kind: Namespace
+  - group: ""
+    kind: PersistentVolumeClaim
+  - group: "apps"
+    kind: Deployment
+  - group: ""
+    kind: Service
   syncPolicy:
     automated:
       prune: true
