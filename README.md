@@ -17,7 +17,7 @@
 - [AdGuard Home](docs/adguard-home-deployment.md)
 - [Storage Setup](docs/storage-setup.md)
 - [Monitoring Stack](docs/monitoring-deployment.md)
-- [GitOps](docs/docs/argocd-setup.md)
+- [GitOps](docs/argocd-setup.md)
 
 ## Hardware
 - 3x Dell Edge Platform
