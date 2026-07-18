@@ -1,0 +1,148 @@
+# apps/alertmanager/alertmanager.yaml
+# Alertmanager for k8s-homelab - Public Git version (placeholder only)
+
+---
+# Placeholder Secret - DO NOT commit real values
+apiVersion: v1
+kind: Secret
+metadata:
+  name: alertmanager-secret
+  namespace: monitoring
+type: Opaque
+stringData:
+  webhook_url: "https://discord.com/api/webhooks/PLACEHOLDER"
+
+---
+# Alertmanager ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-config
+  namespace: monitoring
+data:
+  alertmanager.yml: |
+    global:
+      resolve_timeout: 5m
+
+    route:
+      group_by: ['alertname', 'job']
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 12h
+      receiver: 'default-receiver'
+
+    receivers:
+      - name: 'default-receiver'
+        webhook_configs:
+          - url: 'https://discord.com/api/webhooks/PLACEHOLDER'
+            send_resolved: true
+
+---
+# PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: alertmanager-data
+  namespace: monitoring
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alertmanager
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alertmanager
+  template:
+    metadata:
+      labels:
+        app: alertmanager
+    spec:
+      containers:
+      - name: alertmanager
+        image: prom/alertmanager:latest
+        args:
+          - '--config.file=/etc/alertmanager/alertmanager.yml'
+          - '--storage.path=/alertmanager'
+        ports:
+        - containerPort: 9093
+        volumeMounts:
+        - name: config
+          mountPath: /etc/alertmanager
+        - name: data
+          mountPath: /alertmanager
+      volumes:
+      - name: config
+        configMap:
+          name: alertmanager-config
+      - name: data
+        persistentVolumeClaim:
+          claimName: alertmanager-data
+
+---
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: alertmanager
+  namespace: monitoring
+spec:
+  selector:
+    app: alertmanager
+  ports:
+  - port: 9093
+    targetPort: 9093
+    nodePort: 30993
+  type: NodePort
+
+---
+# Alerting Rules
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-alert-rules
+  namespace: monitoring
+data:
+  alerts.yml: |
+    groups:
+    - name: homelab-alerts
+      rules:
+      - alert: NodeDown
+        expr: up{job="node-exporter"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Node {{ $labels.instance }} is down"
+      - alert: HighMemoryUsage
+        expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100 < 15
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage on {{ $labels.instance }}"
+      - alert: HighCPUUsage
+        expr: 100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage on {{ $labels.instance }}"
+      - alert: PodCrashLooping
+        expr: rate(kube_pod_container_status_restarts_total[15m]) > 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Pod {{ $labels.pod }} is crash looping"
