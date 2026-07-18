@@ -57,6 +57,7 @@ spec:
 ---
 apiVersion: v1
 kind: Service
+# Test comment - App of Apps is working
 metadata:
   name: adguard-home
   namespace: adguard
