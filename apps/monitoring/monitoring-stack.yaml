@@ -43,14 +43,28 @@ data:
   prometheus.yml: |
     global:
       scrape_interval: 15s
+      evaluation_interval: 15s
+
+    alerting:
+      alertmanagers:
+        - static_configs:
+            - targets: ['alertmanager:9093']
+
+    rule_files:
+      - /etc/prometheus/rules/alerts.yml
+
     scrape_configs:
       - job_name: 'prometheus'
         static_configs:
-        - targets: ['localhost:9090']
+          - targets: ['localhost:9090']
+
       - job_name: 'node-exporter'
         static_configs:
-        - targets: ['192.168.4.43:9100', '192.168.4.20:9100', '192.168.4.26:9100']
+          - targets: ['192.168.4.43:9100', '192.168.4.20:9100', '192.168.4.26:9100']
 
+      - job_name: 'alertmanager'
+        static_configs:
+          - targets: ['alertmanager:9093']
 ---
 # Prometheus
 apiVersion: v1
@@ -92,16 +106,21 @@ spec:
         volumeMounts:
         - name: config
           mountPath: /etc/prometheus
+        - name: rules
+          mountPath: /etc/prometheus/rules
         - name: data
           mountPath: /prometheus
       volumes:
       - name: config
         configMap:
           name: prometheus-config
+      - name: rules
+        configMap:
+          name: prometheus-alert-rules
       - name: data
         persistentVolumeClaim:
-          claimName: prometheus-data
-
+          claimName: prometheus-data  
+      
 ---
 apiVersion: v1
 kind: Service
