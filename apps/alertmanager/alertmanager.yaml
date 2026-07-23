@@ -1,8 +1,9 @@
 # apps/alertmanager/alertmanager.yaml
-# Alertmanager for k8s-homelab - Public Git version (placeholder only)
+# Alertmanager for k8s-homelab
+# Uses discord_configs (working) + placeholder for webhook URL
 
 ---
-# Placeholder Secret - DO NOT commit real values
+# Placeholder Secret - DO NOT commit real webhook URL
 apiVersion: v1
 kind: Secret
 metadata:
@@ -33,9 +34,10 @@ data:
 
     receivers:
       - name: 'default-receiver'
-        webhook_configs:
-          - url: 'https://discord.com/api/webhooks/PLACEHOLDER'
+        discord_configs:
+          - webhook_url: 'https://discord.com/api/webhooks/PLACEHOLDER'
             send_resolved: true
+            content: '**🚨 Homelab Alert**\n**{{ .CommonAnnotations.summary }}**\nSeverity: {{ .CommonLabels.severity }}'
 
 ---
 # PVC
@@ -125,6 +127,8 @@ data:
           severity: critical
         annotations:
           summary: "Node {{ $labels.instance }} is down"
+          description: "Node exporter on {{ $labels.instance }} has been down for more than 2 minutes."
+
       - alert: HighMemoryUsage
         expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100 < 15
         for: 5m
@@ -132,6 +136,8 @@ data:
           severity: warning
         annotations:
           summary: "High memory usage on {{ $labels.instance }}"
+          description: "Memory available is below 15% on {{ $labels.instance }}."
+
       - alert: HighCPUUsage
         expr: 100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
         for: 5m
@@ -139,6 +145,8 @@ data:
           severity: warning
         annotations:
           summary: "High CPU usage on {{ $labels.instance }}"
+          description: "CPU usage is above 80% on {{ $labels.instance }} for more than 5 minutes."
+
       - alert: PodCrashLooping
         expr: rate(kube_pod_container_status_restarts_total[15m]) > 0
         for: 5m
@@ -146,3 +154,4 @@ data:
           severity: warning
         annotations:
           summary: "Pod {{ $labels.pod }} is crash looping"
+          description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} has restarted recently."
