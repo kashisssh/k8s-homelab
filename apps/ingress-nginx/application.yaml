@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://kubernetes.github.io/ingress-nginx
     chart: ingress-nginx
-    targetRevision: 4.12.1          # Recent stable version
+    targetRevision: 4.12.3
     helm:
       releaseName: ingress-nginx
       values: |
@@ -28,7 +28,12 @@ spec:
           metrics:
             enabled: true
           admissionWebhooks:
-            enabled: false          # Saves resources on small cluster
+            enabled: false
+          ingressClassResource:
+            name: nginx
+            enabled: true
+            default: true
+          electionID: ingress-nginx-leader
         defaultBackend:
           enabled: false
   destination:
