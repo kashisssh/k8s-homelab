@@ -1,8 +1,6 @@
-# Cluster Status - June 16, 2026
-
 ## Hardware
 - 3x Compact Compute nodes (8GB RAM each)
-- Netgear GS108 Switch + TP-Link WiFi Extender (RE315)
+- Netgear Switch + TP-Link WiFi Extender
 
 ## Installation Challenges & Solutions
 
