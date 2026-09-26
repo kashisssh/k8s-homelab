@@ -1,6 +1,6 @@
 # k8s-homelab
 
-3-node bare-metal **k3s** cluster for Smart Home + Media services + Network Services.
+Compact 3-node bare-metal **k3s** cluster for home lab. 
 
 ## Current Status
 - 3 nodes running (k3s v1.35)
