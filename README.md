@@ -1,6 +1,6 @@
 # k8s-homelab
 
-3-node bare-metal **k3s** cluster on Dell for Smart Home + Media services + Network Services.
+3-node bare-metal **k3s** cluster for Smart Home + Media services + Network Services.
 
 ## Current Status
 - 3 nodes running (k3s v1.35)
