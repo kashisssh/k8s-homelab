@@ -42,7 +42,7 @@ Internet / Home Network (192.168.4.0/22)
     +-----------------------------+
 
 ## Key Layers
-- **Hardware**: 3x Dell Edge + Netgear Switch + TP-Link Extender
+- **Hardware**: 3x Compact Compute Nodes + Netgear Switch + TP-Link Extender
 - **OS**: Ubuntu 22.04.5 LTS
 - **Orchestration**: k3s Lightweight Kubernetes
 - **GitOps**: ArgoCD (managing AdGuard + planned for all apps)
