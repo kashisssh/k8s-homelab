@@ -1,7 +1,7 @@
 # Cluster Status - June 16, 2026
 
 ## Hardware
-- 3x Dell Edge (8GB RAM each)
+- 3x Compact Compute nodes (8GB RAM each)
 - Netgear GS108 Switch + TP-Link WiFi Extender (RE315)
 
 ## Installation Challenges & Solutions
