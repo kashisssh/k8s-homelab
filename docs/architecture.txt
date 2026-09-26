@@ -1,6 +1,6 @@
 # k3s Homelab Architecture
 
-Internet / Home Network (192.168.4.0/22)
+Internet / Home Network (/22)
           |
    +------+------+
    | Eero Router |
